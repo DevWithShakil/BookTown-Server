@@ -20,7 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/v1', router);
 
 app.get('/', async (req, res) => {
-  res.send('Welcome to summer-camp-school Server application');
+  res.send('Welcome to BookTown Server application');
 });
 
 //client error handler
