@@ -1,0 +1,44 @@
+[
+  {
+    "id": "001",
+    "role": "user",
+    "address": "123 Main St, City, Country",
+    "phoneNumber": "+1 123-456-7890",
+    "gender": "male",
+    "name": "John Doe",
+    "email": "johndoe@example.com",
+    "image": "https://example.com/images/johndoe.jpg",
+    "phone": "+1 987-654-3210",
+    "isBanned": false,
+    "isAdmin": false,
+    "password": "password123"
+  },
+  {
+    "id": "002",
+    "role": "user",
+    "address": "456 Elm St, City, Country",
+    "phoneNumber": "+1 111-222-3333",
+    "gender": "female",
+    "name": "Jane Smith",
+    "email": "janesmith@example.com",
+    "image": "https://example.com/images/janesmith.jpg",
+    "phone": "+1 444-555-6666",
+    "isBanned": false,
+    "isAdmin": false,
+    "password": "secret456"
+  },
+  {
+    "id": "003",
+    "role": "admin",
+    "address": "789 Oak St, City, Country",
+    "phoneNumber": "+1 999-888-7777",
+    "gender": "non-binary",
+    "name": "Alex Johnson",
+    "email": "alexjohnson@example.com",
+    "image": "https://example.com/images/alexjohnson.jpg",
+    "phone": "+1 222-333-4444",
+    "isBanned": false,
+    "isAdmin": true,
+    "password": "admin789"
+  }
+]
