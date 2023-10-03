@@ -1,13 +1,13 @@
 import express from 'express';
-import { BookRoutes } from '../modules/book/books.routes';
-import { UserRoutes } from '../modules/user/user.route';
 import { AuthRoutes } from '../modules/auth/auth.route';
+import { UserRoutes } from '../modules/user/user.route';
+import { BookRoutes } from '../modules/books/book.route';
 
 const router = express.Router();
 
 const moduleRoutes = [
   {
-    path: '/user',
+    path: '/users',
     route: UserRoutes,
   },
   {
@@ -15,11 +15,10 @@ const moduleRoutes = [
     route: AuthRoutes,
   },
   {
-    path: '/books',
+    path: '/book',
     route: BookRoutes,
   },
 ];
 
-moduleRoutes.forEach(r => router.use(r.path, r.route));
-
+moduleRoutes.forEach(route => router.use(route.path, route.route));
 export default router;

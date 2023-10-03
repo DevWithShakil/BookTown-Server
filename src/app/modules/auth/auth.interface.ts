@@ -1,29 +1,22 @@
 import { ENUM_USER_ROLE } from '../../../enums/user';
+import { IUser } from '../user/user.interface';
 
 export type ILoginUser = {
-  email: string;
+  id: string;
   password: string;
 };
 
 export type ILoginUserResponse = {
   accessToken: string;
   refreshToken?: string;
-  logInUserRole?: string;
-  userDetails?: object | null;
-  email?: string;
+  user: IUser | null;
 };
 
 export type IRefreshTokenResponse = {
   accessToken: string;
-  role?: string;
 };
 
 export type IVerifiedLoginUser = {
-  email: string;
+  userId: string;
   role: ENUM_USER_ROLE;
-};
-
-export type IChangePassword = {
-  oldPassword: string;
-  newPassword: string;
 };

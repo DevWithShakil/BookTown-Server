@@ -1,27 +1,22 @@
-Welcome to The BookTown [SERVER]! This is an Books store website that provides a platform for where ShowCase Different Types Of Books
+# Book Catalog Server site Live link[https://book-catalog-liard.vercel.app/]
 
-## Features
+# Book Catalog Frontend Live link[https://book-catalog-fontend.vercel.app/]
 
-- User authentication and authorization
-- Course Create,Update,Delete,Read
-- Interactive learning materials
-- Discussion forums
-- Assignments and assessments
-- Progress tracking
-- Notifications and announcements
+## https://book-catalog-fontend.vercel.app/
 
-## Technologies Used
+# Application Routes:
 
-- Backend: Node.js, Express.js,Typescript
-- Database: MongoDB
-- Deployment: Vercel
-- Authentication: JWT
-- Packages Used: bcrypt,http-errors,http-status-codes,zod
+## Auth (User)
 
-#### Book Catalog Application
+- Route: https://book-catalog-liard.vercel.app/api/v1/auth/login (POST)
+- Route: https://book-catalog-liard.vercel.app/api/v1/auth/signup (POST)
+- Route: https://book-catalog-liard.vercel.app/api/v1/auth/refresh-token (POST)
+- Route: https://book-catalog-liard.vercel.app/api/v1/auth/me (GET)
 
-### Live Link(vercel): https://booktown.vercel.app/
+## Books (Admin)
 
-### Application Routes:
-
-# BookTown Server Side
+- Route: https://book-catalog-liard.vercel.app/api/v1/book (GET)
+- Route: https://book-catalog-liard.vercel.app/api/v1/book/create (post)
+- Route: https://book-catalog-liard.vercel.app/api/v1/book/review/:id (post)
+- Route: https://book-catalog-liard.vercel.app/api/v1/book/:id (delete)
+- Route: https://book-catalog-liard.vercel.app/api/v1/book/:id (patch)

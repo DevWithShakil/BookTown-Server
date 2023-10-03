@@ -1,6 +1,5 @@
-import { JwtPayload, Secret } from "jsonwebtoken";
-import jwt from 'jsonwebtoken';
-
+/* eslint-disable no-unused-vars */
+import jwt, { JwtPayload, Secret } from 'jsonwebtoken';
 
 const createToken = (
   payload: Record<string, unknown>,
@@ -8,7 +7,7 @@ const createToken = (
   expireTime: string
 ): string => {
   return jwt.sign(payload, secret, {
-    expiresIn: expireTime,
+    expiresIn: '15d',
   });
 };
 

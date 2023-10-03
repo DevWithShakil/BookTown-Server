@@ -1,67 +1,81 @@
-/* eslint-disable no-unused-expressions */
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
-import { ErrorRequestHandler } from 'express';
+/* eslint-disable no-unused-expressions */
+import { ErrorRequestHandler, NextFunction, Request, Response } from 'express';
 import config from '../../config';
-import { ApiError } from '../../handlingError/ApiError';
-import handleValidationError from '../../handlingError/handleValidationError';
+import ApiError from '../../errors/ApiError';
+import handleValidationError from '../../errors/handleValidationError';
 
 import { ZodError } from 'zod';
-import handleZodError from '../../handlingError/handleZodError';
+import handleCastError from '../../errors/handleCastError';
+import handleZodError from '../../errors/handleZodError';
+import { IGenericErrorMessage } from '../../interfaces/error';
 
-const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
-  type IGenericErrorMessage = {
-    path: string | number;
-    message: string;
-  };
-
+const globalErrorHandler: ErrorRequestHandler = (
+  error,
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   config.env === 'development'
-    ? console.log('globalErrorHandler ~ ', err)
-    : console.error('globalErrorHandler ~ ', err);
+    ? console.log(`🐱‍🏍 globalErrorHandler ~~`, { error })
+    : console.log(`🐱‍🏍 globalErrorHandler ~~`, error);
 
-  let statusCode = 400;
-  let message = 'Something went Good 420';
+  let statusCode = 500;
+  let message = 'Something went wrong !';
   let errorMessages: IGenericErrorMessage[] = [];
 
-  if (err?.name === 'ValidationError') {
-    const simplefiedError = handleValidationError(err);
-    statusCode = simplefiedError.statusCode;
-    message = simplefiedError.message;
-    errorMessages = simplefiedError.errorMessages;
-  } else if (err instanceof ApiError) {
-    statusCode = err.status;
-    message = err.message;
-    errorMessages = err?.message
+  if (error?.name === 'ValidationError') {
+    const simplifiedError = handleValidationError(error);
+    statusCode = simplifiedError.statusCode;
+    message = simplifiedError.message;
+    errorMessages = simplifiedError.errorMessages;
+  } else if (error instanceof ZodError) {
+    const simplifiedError = handleZodError(error);
+    statusCode = simplifiedError.statusCode;
+    message = simplifiedError.message;
+    errorMessages = simplifiedError.errorMessages;
+  } else if (error?.name === 'CastError') {
+    const simplifiedError = handleCastError(error);
+    statusCode = simplifiedError.statusCode;
+    message = simplifiedError.message;
+    errorMessages = simplifiedError.errorMessages;
+  } else if (error instanceof ApiError) {
+    statusCode = error?.statusCode;
+    message = error.message;
+    errorMessages = error?.message
       ? [
           {
             path: '',
-            message: err?.message,
+            message: error?.message,
           },
         ]
       : [];
-  } else if (err instanceof ZodError) {
-    const simplefiedError = handleZodError(err);
-    statusCode = simplefiedError.statusCode;
-    message = simplefiedError.message;
-    errorMessages = simplefiedError.errorMessages;
-  } else if (err instanceof Error) {
-    message = err?.message;
-    errorMessages = err?.message
+  } else if (error instanceof Error) {
+    message = error?.message;
+    errorMessages = error?.message
       ? [
           {
             path: '',
-            message: err?.message,
+            message: error?.message,
           },
         ]
       : [];
   }
+
   res.status(statusCode).json({
     success: false,
     message,
     errorMessages,
-    stack: config.env !== 'production' ? err?.stack : undefined,
+    stack: config.env !== 'production' ? error?.stack : undefined,
   });
-
-  next();
 };
 
 export default globalErrorHandler;
+
+//path:
+//message:
+
+// 2025 Fall
+
+// 2025 and

@@ -1,35 +1,44 @@
 import { z } from 'zod';
 
-const createUserZodSchema = z.object({
-  body: z.object({
-    // name: z.object({
-    //   firstName: z.string(),
-    //   lastName: z.string(),
-    // }),
-    firstName: z.string({
-      required_error: 'firstName is required ',
-    }),
-    lastName: z.string({
-      required_error: 'lastName is required ',
-    }),
-    email: z.string({
-      required_error: 'Email is required ',
-    }),
-    password: z.string({
-      required_error: 'Password is required ',
-    }),
-  }),
+const ICardSchema = z.object({
+  cardNum: z.string(),
+  cardName: z.string(),
 });
+
+const IPlanSchema = z.object({
+  planId: z.string().optional(),
+});
+
 const updateUserZodSchema = z.object({
   body: z.object({
-    name: z.object({
-      firstName: z.string().optional(),
-      lastName: z.string().optional(),
-    }),
+    password: z
+      .string({
+        required_error: 'Password is required',
+      })
+      .optional(),
+    name: z
+      .object({
+        firstName: z.string().optional(),
+        lastName: z.string().optional(),
+        middleName: z.string().optional(),
+      })
+      .optional(),
+    role: z.enum(['user', 'admin', 'subAdmin']).optional(),
+    status: z.enum(['active', 'inactive', 'block']).optional(),
+    balance: z.number().optional(),
+    gender: z.enum(['male', 'female']).optional(),
+    email: z.string().email().optional(),
+    phoneNumber: z.string().optional(),
+    ipAddress: z.string().optional(),
+    address: z.string().optional(),
+    imageURL: z.string().url().optional(),
+    referCode: z.string().optional(),
+    myReferralCode: z.string().optional(),
+    card: z.array(ICardSchema).optional(),
+    plan: z.array(IPlanSchema).optional(),
   }),
 });
 
-export const UserValidaion = {
+export const UserValidation = {
   updateUserZodSchema,
-  createUserZodSchema,
 };

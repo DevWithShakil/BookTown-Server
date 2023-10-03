@@ -1,23 +1,30 @@
-import { Request, Response } from 'express';
-import { StatusCodes } from 'http-status-codes';
+import { Request, RequestHandler, Response } from 'express';
+import httpStatus from 'http-status';
 import config from '../../../config';
-import catchAsync from '../../../shared/catchAsync';
-import sendResponse from '../../../shared/sendResponse';
+import catchAsync from '../../../share/catchAsync';
+import sendResponse from '../../../share/sendResponse';
+import { IUser } from '../user/user.interface';
 import { ILoginUserResponse, IRefreshTokenResponse } from './auth.interface';
 import { AuthService } from './auth.service';
 
-const sendLoginResponse = async (res: Response, message: string, data: any) => {
-  sendResponse<ILoginUserResponse>(res, {
-    statusCode: StatusCodes.OK,
-    success: true,
-    message,
-    data,
-  });
-};
+const signUp: RequestHandler = catchAsync(
+  async (req: Request, res: Response) => {
+    const userData = req.body;
+    console.log(userData);
+    const result = await AuthService.signUp(userData);
 
-const loginStudent = catchAsync(async (req: Request, res: Response) => {
+    sendResponse<IUser>(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'user created successfully!',
+      data: result,
+    });
+  }
+);
+
+const loginUser = catchAsync(async (req: Request, res: Response) => {
   const { ...loginData } = req.body;
-  const result = await AuthService.loginStudent(loginData);
+  const result = await AuthService.loginUser(loginData);
   const { refreshToken, ...others } = result;
 
   const cookieOptions = {
@@ -26,12 +33,22 @@ const loginStudent = catchAsync(async (req: Request, res: Response) => {
   };
 
   res.cookie('refreshToken', refreshToken, cookieOptions);
-  sendLoginResponse(res, 'User Loggedin successfully !', others);
+
+  sendResponse<ILoginUserResponse>(res, {
+    statusCode: 200,
+    success: true,
+    message: 'User login successfully !',
+    data: others,
+  });
 });
 
 const refreshToken = catchAsync(async (req: Request, res: Response) => {
   const { refreshToken } = req.cookies;
+
   const result = await AuthService.refreshToken(refreshToken);
+
+  // set refresh token into cookie
+
   const cookieOptions = {
     secure: config.env === 'production',
     httpOnly: true,
@@ -42,29 +59,42 @@ const refreshToken = catchAsync(async (req: Request, res: Response) => {
   sendResponse<IRefreshTokenResponse>(res, {
     statusCode: 200,
     success: true,
-    message: 'User logged in and Generate a new Access token successfully  !',
+    message: 'User login successfully !',
     data: result,
   });
 });
 
+const getMe: RequestHandler = catchAsync(
+  async (req: Request, res: Response) => {
+    const result = await AuthService.getMe(req.user?.phoneNumber);
+    sendResponse<IUser>(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'user get successfully!',
+      data: result,
+    });
+  }
+);
 
-const changePassword = catchAsync(async (req: Request, res: Response) => {
-  const { ...passwordData } = req.body;
+const ChangePss: RequestHandler = catchAsync(
+  async (req: Request, res: Response) => {
+    const { oldPass, newPass } = req.body;
+    const { id } = req.params;
+    const result = await AuthService.changePass(id, oldPass, newPass);
 
-  const user = req.user;
-  const result = await AuthService.changePassword(user, passwordData);
-  sendResponse(res, {
-    statusCode: 200,
-    success: true,
-    message: 'Password Changed successfully !',
-    data: result,
-  });
-});
-
-
+    sendResponse<IUser>(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'password change successfully!',
+      data: result,
+    });
+  }
+);
 
 export const AuthController = {
-  loginStudent,
+  signUp,
+  loginUser,
   refreshToken,
-  changePassword
+  getMe,
+  ChangePss,
 };
