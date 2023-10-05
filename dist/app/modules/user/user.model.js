@@ -101,4 +101,4 @@ UserSchema.pre('save', function (next) {
         next();
     });
 });
-exports.User = (0, mongoose_1.model)('User', UserSchema);
+exports.User = (0, mongoose_1.model)('allUser', UserSchema);
