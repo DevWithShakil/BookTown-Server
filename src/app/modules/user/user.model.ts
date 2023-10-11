@@ -103,4 +103,4 @@ UserSchema.pre('save', async function (next) {
   next();
 });
 
-export const User = model<IUser, UserModel>('allUser', UserSchema);
+export const User = model<IUser, UserModel>('User', UserSchema);

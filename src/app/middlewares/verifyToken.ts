@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import httpStatus, { BAD_REQUEST } from 'http-status';
+import  { BAD_REQUEST } from 'http-status';
 import { Secret } from 'jsonwebtoken';
 import config from '../../config';
 import ApiError from '../../errors/ApiError';
@@ -9,7 +9,7 @@ const verifyToken = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const token = req.headers?.authorization?.split(' ')?.[1];
     if (!token) {
-      throw new ApiError(httpStatus.UNAUTHORIZED, 'You are not authorized');
+      return ('You are not authorize');
     }
     // verify token
     let verifiedUser = null;
